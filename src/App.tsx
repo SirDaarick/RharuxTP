@@ -20,7 +20,10 @@ export function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenView>('setlist');
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [speedMultiplier, setSpeedMultiplier] = useState(1.0);
-  const [voiceMode, setVoiceMode] = useState<VoiceMode>('words');
+  const [voiceMode, setVoiceMode] = useState<VoiceMode>(() => {
+    const saved = localStorage.getItem('rharux_voice_mode') as VoiceMode;
+    return saved === 'words' || saved === 'offline_vad' ? saved : 'off';
+  });
   const [isDebuggerOpen, setIsDebuggerOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -95,9 +98,12 @@ export function App() {
 
   const handleToggleVoiceMode = useCallback(() => {
     setVoiceMode(prev => {
-      if (prev === 'words') return 'offline_vad';
-      if (prev === 'offline_vad') return 'off';
-      return 'words';
+      let next: VoiceMode;
+      if (prev === 'off') next = 'words';
+      else if (prev === 'words') next = 'offline_vad';
+      else next = 'off';
+      localStorage.setItem('rharux_voice_mode', next);
+      return next;
     });
   }, []);
 
