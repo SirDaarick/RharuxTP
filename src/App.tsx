@@ -3,7 +3,6 @@ import { SETLIST } from './data/songs';
 import type { Song } from './data/songs';
 import { useTimeline } from './hooks/useTimeline';
 import { useVoiceSync } from './hooks/useVoiceSync';
-import { useOfflineVoiceTrigger } from './hooks/useOfflineVoiceTrigger';
 import { useWakeLock } from './hooks/useWakeLock';
 import { useStageShortcuts } from './hooks/useStageShortcuts';
 import { StageHeader } from './components/StageHeader';
@@ -13,7 +12,7 @@ import { SetlistView } from './components/SetlistView';
 import { VoiceDebugger } from './components/VoiceDebugger';
 import gsap from 'gsap';
 
-export type VoiceMode = 'words' | 'offline_vad' | 'off';
+export type VoiceMode = 'words' | 'off';
 export type ScreenView = 'setlist' | 'prompter';
 
 export function App() {
@@ -22,7 +21,7 @@ export function App() {
   const [speedMultiplier, setSpeedMultiplier] = useState(1.0);
   const [voiceMode, setVoiceMode] = useState<VoiceMode>(() => {
     const saved = localStorage.getItem('rharux_voice_mode') as VoiceMode;
-    return saved === 'words' || saved === 'offline_vad' ? saved : 'off';
+    return saved === 'words' ? 'words' : 'off';
   });
   const [isDebuggerOpen, setIsDebuggerOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -88,14 +87,6 @@ export function App() {
     onAdvanceToNextLine: advanceToNextLine,
   });
 
-  // Offline Voice Activity Trigger (Huawei / offline Web Audio)
-  useOfflineVoiceTrigger({
-    enabled: voiceMode === 'offline_vad' && currentScreen === 'prompter',
-    thresholdPercent: 20,
-    silenceDurationMs: 350,
-    onVoiceTrigger: () => advanceToNextLine(),
-  });
-
   // Countdown Engine (3-2-1 Lead-in Count-in)
   const [countdown, setCountdown] = useState<number | null>(null);
   const countdownIntervalRef = useRef<number | null>(null);
@@ -143,10 +134,7 @@ export function App() {
 
   const handleToggleVoiceMode = useCallback(() => {
     setVoiceMode(prev => {
-      let next: VoiceMode;
-      if (prev === 'off') next = 'words';
-      else if (prev === 'words') next = 'offline_vad';
-      else next = 'off';
+      const next: VoiceMode = prev === 'off' ? 'words' : 'off';
       localStorage.setItem('rharux_voice_mode', next);
       return next;
     });

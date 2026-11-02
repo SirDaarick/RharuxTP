@@ -1029,11 +1029,6 @@ html, body, #root {
   box-shadow: 0 0 6px var(--color-online);
 }
 
-.dot-vad {
-  background: var(--color-vad);
-  box-shadow: 0 0 6px var(--color-vad);
-}
-
 .dock-btn-mic-active {
   color: #fff;
 }

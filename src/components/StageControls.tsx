@@ -131,10 +131,8 @@ export const StageControls: React.FC<StageControlsProps> = ({
           onClick={onToggleVoice}
           title={
             voiceMode === 'words'
-              ? 'Mic: Google Online (Click para cambiar)'
-              : voiceMode === 'offline_vad'
-              ? 'Mic: Huawei VAD (Click para cambiar)'
-              : 'Mic: Apagado (Click para encender)'
+              ? 'Micrófono: Activo (Click para apagar y usar Tiempo)'
+              : 'Micrófono: Apagado (Click para activar sincronización por voz)'
           }
         >
           {voiceMode === 'off' ? (
@@ -142,11 +140,7 @@ export const StageControls: React.FC<StageControlsProps> = ({
           ) : (
             <div className="mic-icon-wrapper">
               <Mic size={16} />
-              <span
-                className={`mic-dot ${
-                  voiceMode === 'offline_vad' ? 'dot-vad' : 'dot-online'
-                }`}
-              />
+              <span className="mic-dot dot-online" />
             </div>
           )}
         </button>
