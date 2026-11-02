@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import type { Song } from '../data/songs';
+import type { Song, ChordToken } from '../data/songs';
 
 export interface FlatLine {
   sectionIndex: number;
@@ -9,6 +9,7 @@ export interface FlatLine {
   globalLineIndex: number;
   text: string;
   chords?: string;
+  tokens?: ChordToken[];
   startTimeSec: number;
   durationSec: number;
   endTimeSec: number;
@@ -51,6 +52,7 @@ export function useTimeline({
           globalLineIndex: globalIndex++,
           text: line.text,
           chords: line.chords,
+          tokens: line.tokens,
           startTimeSec: currentT,
           durationSec: durationPerLine,
           endTimeSec: currentT + durationPerLine,

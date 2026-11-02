@@ -178,8 +178,8 @@ export const SongPrompter: React.FC<SongPrompterProps> = ({
                     }
                   }}
                 >
-                  {/* Clean Chords Tag Above Lyric */}
-                  {line.chords && (
+                  {/* Clean Chords Tag Above Lyric (fallback if no tokenized chords) */}
+                  {!line.tokens && line.chords && (
                     <div className="spotify-chord-tag">{line.chords}</div>
                   )}
 
@@ -190,7 +190,20 @@ export const SongPrompter: React.FC<SongPrompterProps> = ({
                         ▶
                       </span>
                     )}
-                    <span className="lyric-string">{line.text}</span>
+                    {line.tokens && line.tokens.length > 0 ? (
+                      <span className="lyric-token-container">
+                        {line.tokens.map((tok, tIdx) => (
+                          <span key={tIdx} className="lyric-token-unit">
+                            <span className="token-chord" aria-hidden="true">
+                              {tok.chord || '\u00A0'}
+                            </span>
+                            <span className="token-text">{tok.text}</span>
+                          </span>
+                        ))}
+                      </span>
+                    ) : (
+                      <span className="lyric-string">{line.text}</span>
+                    )}
                   </div>
 
                   {/* Minimalist Progress Underline */}

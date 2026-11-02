@@ -529,13 +529,68 @@ html, body, #root {
   line-height: 1.28;
   letter-spacing: -0.4px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+}
+
+/* Tokenized chord over words */
+.lyric-token-container {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  column-gap: 0;
+  row-gap: 8px;
+  width: 100%;
+}
+
+.lyric-token-unit {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  white-space: pre-wrap;
+  line-height: 1.2;
+}
+
+.token-chord {
+  font-family: var(--font-mono);
+  font-size: clamp(0.85rem, 1.8vw, 1.2rem);
+  font-weight: 800;
+  color: var(--color-chord, #fbbf24);
+  line-height: 1.15;
+  letter-spacing: 0.5px;
+  user-select: none;
+  min-height: 1.25em;
+  opacity: 0.85;
+  padding-bottom: 2px;
+  transition: opacity 0.2s ease, text-shadow 0.2s ease;
+}
+
+.line-active .token-chord {
+  opacity: 1;
+  color: #fbbf24;
+  text-shadow: 0 0 12px rgba(251, 191, 36, 0.45);
+}
+
+.line-past .token-chord {
+  opacity: 0.25;
+}
+
+.line-future .token-chord {
+  opacity: 0.45;
+}
+
+.token-text {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
 }
 
 .active-cue-arrow {
   color: var(--spotify-green);
   font-size: 0.75em;
   margin-right: 12px;
+  margin-bottom: 0.15em;
+  align-self: flex-end;
   display: inline-flex;
   align-items: center;
   filter: drop-shadow(0 0 8px rgba(30, 215, 96, 0.8));
