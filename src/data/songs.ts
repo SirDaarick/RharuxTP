@@ -84,8 +84,8 @@ export const SETLIST: Song[] = [
             chords: 'Am Am7Em',
             text: 'No sabes si a tu lado está, no sabes',
             tokens: [
-              { text: 'No ' },
-              { chord: 'Am', text: 'sabes si a tu lado está, ' },
+              { chord: 'Am', text: 'No sabes ' },
+              { text: 'si a tu lado está, ' },
               { chord: 'Am7Em', text: 'no sabes' }
             ]
           },
@@ -93,8 +93,8 @@ export const SETLIST: Song[] = [
             chords: 'Am Am7Em',
             text: 'No sabes cuando por ti vendrá, no sabes',
             tokens: [
-              { text: 'No ' },
-              { chord: 'Am', text: 'sabes cuando por ti vendrá, ' },
+              { chord: 'Am', text: 'No sabes ' },
+              { text: 'cuando por ti vendrá, ' },
               { chord: 'Am7Em', text: 'no sabes' }
             ]
           }
@@ -110,7 +110,8 @@ export const SETLIST: Song[] = [
             text: 'En un cuadro de horror',
             tokens: [
               { text: 'En un ' },
-              { chord: 'G', text: 'cuadro de horror' }
+              { chord: 'G', text: 'cuadro ' },
+              { text: 'de horror' }
             ]
           },
           {
@@ -148,7 +149,8 @@ export const SETLIST: Song[] = [
             chords: 'Am Am7Em',
             text: 'Oooh Sr. Muerte, déjame vivir más',
             tokens: [
-              { chord: 'Am', text: 'Oooh Sr. Muerte, déjame ' },
+              { chord: 'Am', text: 'Oooh ' },
+              { text: 'Sr. Muerte, déjame ' },
               { chord: 'Am7Em', text: 'vivir más' }
             ]
           },
@@ -156,9 +158,9 @@ export const SETLIST: Song[] = [
             chords: 'Am Am7Em',
             text: 'Conmigo Sr. Muerte, cuando terminarás ?',
             tokens: [
-              { text: 'Conmigo ' },
-              { chord: 'Am', text: 'Sr. Muerte, ' },
-              { chord: 'Am7Em', text: 'cuando terminarás ?' }
+              { chord: 'Am', text: 'Conmigo Sr. Muerte, ' },
+              { text: 'cuando ' },
+              { chord: 'Am7Em', text: 'terminarás ?' }
             ]
           }
         ]
@@ -180,8 +182,8 @@ export const SETLIST: Song[] = [
             chords: 'Am Am7Em',
             text: 'Sin materia es tu existencia aaahh',
             tokens: [
-              { text: 'Sin ' },
-              { chord: 'Am', text: 'materia es tu ' },
+              { chord: 'Am', text: 'Sin materia ' },
+              { text: 'es tu ' },
               { chord: 'Am7Em', text: 'existencia aaahh' }
             ]
           },
@@ -190,7 +192,8 @@ export const SETLIST: Song[] = [
             text: 'Por eso es que ni una lágrima tu derramarás',
             tokens: [
               { text: 'Por eso ' },
-              { chord: 'Am', text: 'es que ni una lágrima tu ' },
+              { chord: 'Am', text: 'es que ' },
+              { text: 'ni una lágrima tu ' },
               { chord: 'Am7 Em', text: 'derramarás' }
             ]
           },
@@ -199,7 +202,8 @@ export const SETLIST: Song[] = [
             text: 'Sin amenazas cumples tu crítica encomienda',
             tokens: [
               { text: 'Sin ' },
-              { chord: 'Am', text: 'amenazas cumples tu crítica ' },
+              { chord: 'Am', text: 'amenazas ' },
+              { text: 'cumples tu crítica ' },
               { chord: 'Am7 Em', text: 'encomienda' }
             ]
           },
@@ -207,7 +211,8 @@ export const SETLIST: Song[] = [
             chords: 'Am Am7 Em',
             text: 'Déjanos saber: quien a ti te manda ?',
             tokens: [
-              { chord: 'Am', text: 'Déjanos saber: quien a ti ' },
+              { chord: 'Am', text: 'Déjanos saber: ' },
+              { text: 'quien a ti ' },
               { chord: 'Am7', text: 'te ' },
               { chord: 'Em', text: 'manda ?' }
             ]
@@ -232,8 +237,8 @@ export const SETLIST: Song[] = [
             chords: 'Am Am7Em',
             text: 'No sabes si a tu lado está, no sabes',
             tokens: [
-              { text: 'No ' },
-              { chord: 'Am', text: 'sabes si a tu lado está, ' },
+              { chord: 'Am', text: 'No sabes ' },
+              { text: 'si a tu lado está, ' },
               { chord: 'Am7Em', text: 'no sabes' }
             ]
           },
@@ -241,8 +246,8 @@ export const SETLIST: Song[] = [
             chords: 'Am Am7Em',
             text: 'No sabes cuando por ti vendrá, no sabes',
             tokens: [
-              { text: 'No ' },
-              { chord: 'Am', text: 'sabes cuando por ti vendrá, ' },
+              { chord: 'Am', text: 'No sabes ' },
+              { text: 'cuando por ti vendrá, ' },
               { chord: 'Am7Em', text: 'no sabes' }
             ]
           },
@@ -250,8 +255,8 @@ export const SETLIST: Song[] = [
             chords: 'G F, C',
             text: 'No sabes si a tu lado está, no sabes',
             tokens: [
-              { text: 'No ' },
-              { chord: 'G', text: 'sabes si a tu lado está, ' },
+              { chord: 'G', text: 'No sabes ' },
+              { text: 'si a tu lado está, ' },
               { chord: 'F, C', text: 'no sabes' }
             ]
           },
@@ -259,8 +264,8 @@ export const SETLIST: Song[] = [
             chords: 'G F, C',
             text: 'No sabes cuando por ti vendrá, no sabes',
             tokens: [
-              { text: 'No ' },
-              { chord: 'G', text: 'sabes cuando por ti vendrá, ' },
+              { chord: 'G', text: 'No sabes ' },
+              { text: 'cuando por ti vendrá, ' },
               { chord: 'F, C', text: 'no sabes' }
             ]
           }
@@ -511,8 +516,8 @@ export const SETLIST: Song[] = [
             chords: 'A5 E5',
             text: 'Ya no quiero verte parado en la esquina',
             tokens: [
-              { text: 'Ya no ' },
-              { chord: 'A5', text: 'quiero verte parado en la ' },
+              { chord: 'A5', text: 'Ya no quiero verte ' },
+              { text: 'parado en la ' },
               { chord: 'E5', text: 'esquina' }
             ]
           },
@@ -520,7 +525,8 @@ export const SETLIST: Song[] = [
             chords: 'D5 A5',
             text: 'Perdiendo el tiempo, sin nada que hacer',
             tokens: [
-              { chord: 'D5', text: 'Perdiendo el tiempo, sin nada ' },
+              { chord: 'D5', text: 'Perdiendo el tiempo, ' },
+              { text: 'sin nada ' },
               { chord: 'A5', text: 'que hacer' }
             ]
           },
@@ -529,7 +535,8 @@ export const SETLIST: Song[] = [
             text: 'Cuando ves que todos se van a la escuela',
             tokens: [
               { text: 'Cuando ' },
-              { chord: 'A5', text: 'ves que todos se van a la ' },
+              { chord: 'A5', text: 'ves que todos ' },
+              { text: 'se van a la ' },
               { chord: 'E5', text: 'escuela' }
             ]
           },
@@ -537,7 +544,8 @@ export const SETLIST: Song[] = [
             chords: 'D5 A5',
             text: 'Tu te quedas parado no te quieres mover',
             tokens: [
-              { chord: 'D5', text: 'Tu te quedas parado no te quieres ' },
+              { chord: 'D5', text: 'Tu te quedas parado ' },
+              { text: 'no te quieres ' },
               { chord: 'A5', text: 'mover' }
             ]
           }
@@ -603,7 +611,8 @@ export const SETLIST: Song[] = [
             text: 'Tu no debes de hacer siempre lo mismo',
             tokens: [
               { text: 'Tu no ' },
-              { chord: 'A5', text: 'debes de hacer siempre lo ' },
+              { chord: 'A5', text: 'debes de hacer ' },
+              { text: 'siempre lo ' },
               { chord: 'E5', text: 'mismo' }
             ]
           },
@@ -612,7 +621,8 @@ export const SETLIST: Song[] = [
             text: 'Piensa en los problemas que vas a tener',
             tokens: [
               { text: 'Piensa en ' },
-              { chord: 'D5', text: 'los problemas que vas a ' },
+              { chord: 'D5', text: 'los problemas ' },
+              { text: 'que vas a ' },
               { chord: 'A5', text: 'tener' }
             ]
           },
@@ -622,7 +632,8 @@ export const SETLIST: Song[] = [
             tokens: [
               { text: 'Si tu ' },
               { chord: 'A5', text: 'vas en la calle, ' },
-              { chord: 'E5', text: 'escuela o en algún lugar' }
+              { text: 'escuela o en ' },
+              { chord: 'E5', text: 'algún lugar' }
             ]
           },
           {
@@ -630,7 +641,8 @@ export const SETLIST: Song[] = [
             text: 'Problemas y broncas te van a llover',
             tokens: [
               { chord: 'D5', text: 'Problemas y broncas ' },
-              { chord: 'A5', text: 'te van a llover' }
+              { text: 'te van a ' },
+              { chord: 'A5', text: 'llover' }
             ]
           }
         ]
@@ -696,7 +708,8 @@ export const SETLIST: Song[] = [
             text: 'Tu no debes de hacer siempre lo mismo',
             tokens: [
               { text: 'Tu no ' },
-              { chord: 'A5', text: 'debes de hacer siempre lo ' },
+              { chord: 'A5', text: 'debes de hacer ' },
+              { text: 'siempre lo ' },
               { chord: 'E5', text: 'mismo' }
             ]
           },
@@ -705,7 +718,8 @@ export const SETLIST: Song[] = [
             text: 'Piensa en los problemas que vas a tener',
             tokens: [
               { text: 'Piensa en ' },
-              { chord: 'D5', text: 'los problemas que vas a ' },
+              { chord: 'D5', text: 'los problemas ' },
+              { text: 'que vas a ' },
               { chord: 'A5', text: 'tener' }
             ]
           },
@@ -715,7 +729,8 @@ export const SETLIST: Song[] = [
             tokens: [
               { text: 'Si tu ' },
               { chord: 'A5', text: 'vas en la calle, ' },
-              { chord: 'E5', text: 'escuela o en algún lugar' }
+              { text: 'escuela o en ' },
+              { chord: 'E5', text: 'algún lugar' }
             ]
           },
           {
@@ -723,7 +738,8 @@ export const SETLIST: Song[] = [
             text: 'Problemas y broncas te van a llover',
             tokens: [
               { chord: 'D5', text: 'Problemas y broncas ' },
-              { chord: 'A5', text: 'te van a llover' }
+              { text: 'te van a ' },
+              { chord: 'A5', text: 'llover' }
             ]
           }
         ]

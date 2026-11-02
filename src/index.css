@@ -554,13 +554,13 @@ html, body, #root {
 .lyric-token-unit {
   display: inline-flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
   white-space: pre-wrap;
   line-height: 1.2;
 }
 
-/* Standard Inactive Chord Pill */
+/* Standard Inactive Chord Pill - Over its word */
 .token-chord-badge {
   font-family: var(--font-mono);
   font-size: clamp(0.85rem, 1.8vw, 1.1rem);
@@ -579,7 +579,8 @@ html, body, #root {
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  align-self: flex-start;
 }
 
 .token-chord-spacer {
@@ -588,9 +589,10 @@ html, body, #root {
   user-select: none;
   opacity: 0;
   visibility: hidden;
+  align-self: flex-start;
 }
 
-/* HIGH-VOLTAGE ACTIVE CHORD HIGHLIGHT */
+/* HIGH-VOLTAGE ACTIVE CHORD HIGHLIGHT - PINNED ABOVE EXACT WORD */
 .line-active .token-chord-badge {
   opacity: 1 !important;
   color: #ffffff !important;
@@ -605,6 +607,7 @@ html, body, #root {
   box-shadow: 0 0 20px rgba(250, 204, 21, 0.7), inset 0 0 10px rgba(254, 240, 138, 0.4);
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
   transform: translateY(-2px) scale(1.06);
+  align-self: flex-start;
 }
 
 .line-past .token-chord-badge {
