@@ -96,6 +96,51 @@ export function App() {
     onVoiceTrigger: () => advanceToNextLine(),
   });
 
+  // Countdown Engine (3-2-1 Lead-in Count-in)
+  const [countdown, setCountdown] = useState<number | null>(null);
+  const countdownIntervalRef = useRef<number | null>(null);
+
+  const clearCountdown = useCallback(() => {
+    if (countdownIntervalRef.current) {
+      window.clearInterval(countdownIntervalRef.current);
+      countdownIntervalRef.current = null;
+    }
+    setCountdown(null);
+  }, []);
+
+  const handlePlayWithCountdown = useCallback(() => {
+    if (isPlaying) {
+      clearCountdown();
+      togglePlay();
+      return;
+    }
+
+    if (countdown !== null) {
+      // Tap again during countdown -> start immediately
+      clearCountdown();
+      togglePlay();
+      return;
+    }
+
+    // Start 3-second countdown
+    let currentCount = 3;
+    setCountdown(currentCount);
+
+    countdownIntervalRef.current = window.setInterval(() => {
+      currentCount -= 1;
+      if (currentCount <= 0) {
+        clearCountdown();
+        togglePlay();
+      } else {
+        setCountdown(currentCount);
+      }
+    }, 1000);
+  }, [isPlaying, countdown, clearCountdown, togglePlay]);
+
+  useEffect(() => {
+    clearCountdown();
+  }, [currentSongIndex, clearCountdown]);
+
   const handleToggleVoiceMode = useCallback(() => {
     setVoiceMode(prev => {
       let next: VoiceMode;
@@ -105,6 +150,11 @@ export function App() {
       localStorage.setItem('rharux_voice_mode', next);
       return next;
     });
+  }, []);
+
+  const handleSelectVoiceMode = useCallback((mode: VoiceMode) => {
+    setVoiceMode(mode);
+    localStorage.setItem('rharux_voice_mode', mode);
   }, []);
 
   const handlePrevSong = useCallback(() => {
@@ -133,10 +183,8 @@ export function App() {
   const handleStartShow = useCallback(() => {
     setCurrentSongIndex(0);
     setCurrentScreen('prompter');
-    if (!isPlaying) {
-      togglePlay();
-    }
-  }, [isPlaying, togglePlay]);
+    handlePlayWithCountdown();
+  }, [handlePlayWithCountdown]);
 
   const handleToggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement) {
@@ -172,14 +220,25 @@ export function App() {
 
   // Stage Shortcuts
   useStageShortcuts({
-    onTogglePlay: togglePlay,
-    onRestart: restart,
-    onPrevSong: handlePrevSong,
-    onNextSong: handleNextSong,
+    onTogglePlay: handlePlayWithCountdown,
+    onRestart: () => {
+      clearCountdown();
+      restart();
+    },
+    onPrevSong: () => {
+      clearCountdown();
+      handlePrevSong();
+    },
+    onNextSong: () => {
+      clearCountdown();
+      handleNextSong();
+    },
     onNudge: nudgeTime,
     onToggleVoice: handleToggleVoiceMode,
-    onToggleSetlist: () =>
-      setCurrentScreen(prev => (prev === 'setlist' ? 'prompter' : 'setlist')),
+    onToggleSetlist: () => {
+      clearCountdown();
+      setCurrentScreen(prev => (prev === 'setlist' ? 'prompter' : 'setlist'));
+    },
     onToggleFullscreen: handleToggleFullscreen,
   });
 
@@ -197,9 +256,14 @@ export function App() {
             {/* Minimalist Top Header */}
             <StageHeader
               currentSong={currentSong}
-              onBackToSetlist={() => setCurrentScreen('setlist')}
+              onBackToSetlist={() => {
+                clearCountdown();
+                setCurrentScreen('setlist');
+              }}
               currentTimeSec={currentTimeSec}
               isPlaying={isPlaying}
+              voiceMode={voiceMode}
+              onSelectVoiceMode={handleSelectVoiceMode}
             />
 
             {/* Main Spotify-style Prompter Area */}
@@ -208,23 +272,47 @@ export function App() {
               <div className="prompter-vignette-top" />
               <div className="prompter-vignette-bottom" />
 
+              {/* Live Count-in Overlay (3 - 2 - 1) */}
+              {countdown !== null && (
+                <div
+                  className="prompter-countdown-overlay"
+                  onClick={handlePlayWithCountdown}
+                  title="Toca para iniciar de inmediato"
+                >
+                  <div className="countdown-card">
+                    <div className="countdown-number">{countdown}</div>
+                    <div className="countdown-label">¡Prepárate!</div>
+                    <div className="countdown-hint">Toca para saltar la cuenta</div>
+                  </div>
+                </div>
+              )}
+
               <SongPrompter
                 flatLines={flatLines}
                 activeLineIndex={activeLineIndex}
                 currentTimeSec={currentTimeSec}
                 isPlaying={isPlaying}
                 onJumpToLine={jumpToLine}
-                onTogglePlay={togglePlay}
+                onTogglePlay={handlePlayWithCountdown}
               />
             </main>
 
             {/* Minimalist Floating Controls Dock */}
             <StageControls
               isPlaying={isPlaying}
-              onTogglePlay={togglePlay}
-              onRestart={restart}
-              onPrevSong={handlePrevSong}
-              onNextSong={handleNextSong}
+              onTogglePlay={handlePlayWithCountdown}
+              onRestart={() => {
+                clearCountdown();
+                restart();
+              }}
+              onPrevSong={() => {
+                clearCountdown();
+                handlePrevSong();
+              }}
+              onNextSong={() => {
+                clearCountdown();
+                handleNextSong();
+              }}
               hasPrev={hasPrev}
               hasNext={hasNext}
               currentTimeSec={currentTimeSec}

@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Song } from '../data/songs';
+import type { VoiceMode } from '../App';
 import { ChevronLeft } from 'lucide-react';
 
 interface StageHeaderProps {
@@ -7,6 +8,8 @@ interface StageHeaderProps {
   onBackToSetlist: () => void;
   currentTimeSec: number;
   isPlaying: boolean;
+  voiceMode: VoiceMode;
+  onSelectVoiceMode: (mode: VoiceMode) => void;
 }
 
 export const StageHeader: React.FC<StageHeaderProps> = ({
@@ -14,6 +17,8 @@ export const StageHeader: React.FC<StageHeaderProps> = ({
   onBackToSetlist,
   currentTimeSec,
   isPlaying,
+  voiceMode,
+  onSelectVoiceMode,
 }) => {
   const bpm = currentSong.bpm || 120;
   const currentBeat = isPlaying ? Math.floor(currentTimeSec * (bpm / 60)) % 4 : 0;
@@ -31,11 +36,27 @@ export const StageHeader: React.FC<StageHeaderProps> = ({
           <span className="btn-back-label">Setlist</span>
         </button>
 
-        {/* Center: Song Name */}
+        {/* Center: Song Name & Mode Selector */}
         <div className="header-center-info">
           <span className="header-song-title">
             {currentSong.order}. {currentSong.title}
           </span>
+          <div className="header-mode-selector">
+            <button
+              className={`mode-pill ${voiceMode === 'off' ? 'mode-pill-active' : ''}`}
+              onClick={() => onSelectVoiceMode('off')}
+              title="Modo Tiempo: Avance automático por BPM y duración"
+            >
+              ⏱️ Tiempo
+            </button>
+            <button
+              className={`mode-pill ${voiceMode !== 'off' ? 'mode-pill-active' : ''}`}
+              onClick={() => onSelectVoiceMode('words')}
+              title="Modo Voz: Avance sincronizado al cantar"
+            >
+              🎙️ Voz
+            </button>
+          </div>
         </div>
 
         {/* Right: Subtle Metronome Pulse */}
