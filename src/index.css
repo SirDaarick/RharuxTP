@@ -39,8 +39,6 @@
 html, body, #root {
   width: 100%;
   height: 100%;
-  height: 100dvh;
-  min-height: -webkit-fill-available;
   overflow: hidden;
   background-color: var(--bg-pure);
   color: var(--text-active);
@@ -48,14 +46,12 @@ html, body, #root {
   -webkit-font-smoothing: antialiased;
 }
 
-/* App Canvas */
+/* App Canvas - Fixed Viewport Barrier against browser address-bar jitter */
 .teleprompter-app-root {
-  width: 100vw;
-  width: 100dvw;
-  height: 100vh;
-  height: 100dvh;
-  min-height: -webkit-fill-available;
-  position: relative;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   background: radial-gradient(circle at 50% 10%, #15151c 0%, #050507 100%);
   overflow: hidden;
 }
@@ -324,11 +320,14 @@ html, body, #root {
 /* Minimalist Top Header */
 .spotify-stage-header {
   flex-shrink: 0;
-  height: 54px;
-  padding: 0 24px;
+  min-height: calc(64px + env(safe-area-inset-top, 0px));
+  padding-top: max(12px, env(safe-area-inset-top, 0px));
+  padding-bottom: 8px;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
   display: flex;
   align-items: center;
-  background: rgba(10, 10, 12, 0.7);
+  background: rgba(10, 10, 12, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-subtle);
@@ -339,14 +338,15 @@ html, body, #root {
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
-  display: flex;
+  display: grid;
+  grid-template-columns: 80px 1fr 80px;
   align-items: center;
-  justify-content: space-between;
 }
 
 .btn-back-setlist {
   display: inline-flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 4px;
   background: transparent;
   border: none;
@@ -354,9 +354,10 @@ html, body, #root {
   font-size: 0.88rem;
   font-weight: 700;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 6px;
+  padding: 6px 8px;
+  border-radius: 8px;
   transition: all 0.15s ease;
+  width: fit-content;
 }
 
 .btn-back-setlist:hover {
@@ -368,7 +369,10 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  text-align: center;
 }
 
 .header-song-title {
@@ -377,6 +381,11 @@ html, body, #root {
   color: #ffffff;
   letter-spacing: -0.2px;
   line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: min(340px, 50vw);
 }
 
 /* Mode Selector Switch */
@@ -891,11 +900,11 @@ html, body, #root {
    3. FLOATING GLASSMORPHISM CONTROLS DOCK
    ========================================================================== */
 .spotify-controls-floating-dock {
-  position: fixed;
-  bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+  position: absolute;
+  bottom: max(20px, calc(16px + env(safe-area-inset-bottom, 0px)));
   left: 50%;
   transform: translateX(-50%);
-  width: min(90vw, 760px);
+  width: min(92vw, 760px);
   height: 60px;
   background: var(--bg-glass);
   backdrop-filter: blur(24px);
@@ -1279,7 +1288,7 @@ html, body, #root {
 /* Mobile Phones (<= 640px) */
 @media (max-width: 640px) {
   .setlist-view-container {
-    padding: 20px 14px 70px 14px;
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 14px calc(70px + env(safe-area-inset-bottom, 0px)) 14px;
     gap: 20px;
   }
 
@@ -1312,13 +1321,34 @@ html, body, #root {
     font-size: 0.98rem;
   }
 
+  .header-inner-row {
+    grid-template-columns: 50px 1fr 50px;
+  }
+
+  .btn-back-setlist {
+    padding: 6px 2px;
+  }
+
+  .btn-back-label {
+    display: none;
+  }
+
   .spotify-stage-header {
-    height: 48px;
-    padding: 0 12px;
+    min-height: calc(62px + env(safe-area-inset-top, 0px));
+    padding-top: max(14px, env(safe-area-inset-top, 0px));
+    padding-bottom: 8px;
+    padding-left: max(10px, env(safe-area-inset-left, 0px));
+    padding-right: max(10px, env(safe-area-inset-right, 0px));
   }
 
   .header-song-title {
-    font-size: 1rem;
+    font-size: 0.95rem;
+    max-width: 210px;
+  }
+
+  .mode-pill {
+    font-size: 0.7rem;
+    padding: 2.5px 10px;
   }
 
   .metronome-bpm {
@@ -1334,19 +1364,19 @@ html, body, #root {
   }
 
   .prompter-top-spacer {
-    height: calc(50dvh - 28px);
+    height: calc(46dvh - 30px);
   }
 
   .prompter-bottom-spacer {
-    height: calc(50dvh + 80px + env(safe-area-inset-bottom, 0px));
+    height: calc(50dvh + 90px + env(safe-area-inset-bottom, 0px));
   }
 
   .spotify-controls-floating-dock {
-    width: calc(100vw - 24px);
+    width: calc(100vw - 20px);
     max-width: 440px;
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    bottom: max(24px, calc(18px + env(safe-area-inset-bottom, 0px)));
     height: 56px;
-    padding: 0 12px;
+    padding: 0 10px;
     z-index: 50;
   }
 
