@@ -194,9 +194,15 @@ export const SongPrompter: React.FC<SongPrompterProps> = ({
                       <span className="lyric-token-container">
                         {line.tokens.map((tok, tIdx) => (
                           <span key={tIdx} className="lyric-token-unit">
-                            <span className="token-chord" aria-hidden="true">
-                              {tok.chord || '\u00A0'}
-                            </span>
+                            {tok.chord ? (
+                              <span className="token-chord token-chord-badge" aria-hidden="true">
+                                {tok.chord}
+                              </span>
+                            ) : (
+                              <span className="token-chord token-chord-spacer" aria-hidden="true">
+                                {'\u00A0'}
+                              </span>
+                            )}
                             <span className="token-text">{tok.text}</span>
                           </span>
                         ))}

@@ -486,30 +486,33 @@ html, body, #root {
 
 /* Subtle Section Divider */
 .spotify-section-divider {
-  margin: 20px 0 6px 0;
-  font-size: 0.72rem;
+  margin: 24px 0 8px 0;
+  font-size: 0.76rem;
   font-weight: 800;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.28);
-  padding-left: 12px;
+  color: rgba(255, 255, 255, 0.32);
+  text-align: center;
+  padding-left: 0;
 }
 
-/* Lyric Lines */
+/* Lyric Lines - Centered for Stage Performance */
 .spotify-lyric-line {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 8px 14px;
-  border-radius: 8px;
+  align-items: center;
+  text-align: center;
+  padding: 8px 16px;
+  border-radius: 12px;
   cursor: pointer;
-  transform-origin: left center;
+  transform-origin: center center;
   transition: opacity 0.25s ease, transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
-  border-left: 4px solid transparent;
+  border: 1px solid transparent;
 }
 
 .spotify-lyric-line:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .spotify-chord-tag {
@@ -518,9 +521,10 @@ html, body, #root {
   font-weight: 800;
   color: var(--color-chord);
   letter-spacing: 0.5px;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
   opacity: 0.45;
   transition: opacity 0.2s ease;
+  text-align: center;
 }
 
 .spotify-lyric-text {
@@ -530,6 +534,9 @@ html, body, #root {
   letter-spacing: -0.4px;
   display: flex;
   align-items: flex-end;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
 }
 
 /* Tokenized chord over words */
@@ -537,45 +544,77 @@ html, body, #root {
   display: inline-flex;
   flex-wrap: wrap;
   align-items: flex-end;
+  justify-content: center;
   column-gap: 0;
   row-gap: 8px;
   width: 100%;
+  text-align: center;
 }
 
 .lyric-token-unit {
   display: inline-flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  text-align: center;
   white-space: pre-wrap;
   line-height: 1.2;
 }
 
-.token-chord {
+/* Standard Inactive Chord Pill */
+.token-chord-badge {
   font-family: var(--font-mono);
-  font-size: clamp(0.85rem, 1.8vw, 1.2rem);
+  font-size: clamp(0.85rem, 1.8vw, 1.1rem);
   font-weight: 800;
-  color: var(--color-chord, #fbbf24);
-  line-height: 1.15;
-  letter-spacing: 0.5px;
-  user-select: none;
-  min-height: 1.25em;
-  opacity: 0.85;
-  padding-bottom: 2px;
-  transition: opacity 0.2s ease, text-shadow 0.2s ease;
-}
-
-.line-active .token-chord {
-  opacity: 1;
   color: #fbbf24;
-  text-shadow: 0 0 12px rgba(251, 191, 36, 0.45);
+  line-height: 1.2;
+  letter-spacing: 0.8px;
+  user-select: none;
+  min-height: 1.3em;
+  opacity: 0.55;
+  padding: 1px 7px;
+  border-radius: 5px;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  margin-bottom: 5px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.line-past .token-chord {
+.token-chord-spacer {
+  min-height: 1.3em;
+  margin-bottom: 5px;
+  user-select: none;
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* HIGH-VOLTAGE ACTIVE CHORD HIGHLIGHT */
+.line-active .token-chord-badge {
+  opacity: 1 !important;
+  color: #ffffff !important;
+  font-size: clamp(1.1rem, 2.4vw, 1.5rem) !important;
+  font-weight: 900 !important;
+  letter-spacing: 1.2px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.5) 0%, rgba(217, 119, 6, 0.65) 100%) !important;
+  border: 2px solid #fde047 !important;
+  border-radius: 7px;
+  padding: 3px 12px;
+  margin-bottom: 7px;
+  box-shadow: 0 0 20px rgba(250, 204, 21, 0.7), inset 0 0 10px rgba(254, 240, 138, 0.4);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  transform: translateY(-2px) scale(1.06);
+}
+
+.line-past .token-chord-badge {
   opacity: 0.25;
+  background: transparent;
+  border-color: transparent;
 }
 
-.line-future .token-chord {
-  opacity: 0.45;
+.line-future .token-chord-badge {
+  opacity: 0.5;
 }
 
 .token-text {
@@ -583,13 +622,14 @@ html, body, #root {
   font-weight: inherit;
   line-height: inherit;
   letter-spacing: inherit;
+  text-align: center;
 }
 
 .active-cue-arrow {
   color: var(--spotify-green);
   font-size: 0.75em;
-  margin-right: 12px;
-  margin-bottom: 0.15em;
+  margin-right: 10px;
+  margin-bottom: 0.2em;
   align-self: flex-end;
   display: inline-flex;
   align-items: center;
@@ -614,19 +654,19 @@ html, body, #root {
 }
 
 .line-past .spotify-chord-tag {
-  opacity: 0.25;
+  opacity: 0.2;
 }
 
-/* ACTIVE FOCUS LINE - STAGE ILLUMINATION */
+/* ACTIVE FOCUS LINE - STAGE ILLUMINATION CAPSULE */
 .line-active {
   opacity: 1 !important;
   color: #ffffff;
   transform: scale(1.035);
-  background: linear-gradient(90deg, rgba(30, 215, 96, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%);
-  border-left: 5px solid var(--spotify-green) !important;
-  border-radius: 4px 14px 14px 4px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(30, 215, 96, 0.05);
-  padding: 10px 16px;
+  background: radial-gradient(ellipse at center, rgba(30, 215, 96, 0.16) 0%, rgba(30, 215, 96, 0.02) 75%, transparent 100%);
+  border: 1px solid rgba(30, 215, 96, 0.4) !important;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 25px rgba(30, 215, 96, 0.12);
+  padding: 12px 20px;
 }
 
 .line-active .spotify-lyric-text {
@@ -636,19 +676,26 @@ html, body, #root {
 
 .line-active .spotify-chord-tag {
   opacity: 1 !important;
-  color: #fde047;
+  color: #ffffff;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.5) 0%, rgba(217, 119, 6, 0.65) 100%);
+  border: 2px solid #fde047;
+  border-radius: 7px;
+  padding: 4px 14px;
   font-weight: 900;
-  text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
-  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  box-shadow: 0 0 20px rgba(250, 204, 21, 0.7);
+  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+  display: inline-block;
+  margin-bottom: 8px;
 }
 
 /* Vibrant Underline Progress */
 .lyric-progress-track {
   width: 100%;
+  max-width: 320px;
+  margin: 12px auto 0 auto;
   height: 3.5px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 9999px;
-  margin-top: 10px;
   overflow: hidden;
 }
 
@@ -660,26 +707,26 @@ html, body, #root {
   transition: width 0.1s linear;
 }
 
-/* Instrumental Line (Spotify Style) */
+/* Instrumental Line (Spotify Style - Centered) */
 .spotify-inst-line {
   position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.04);
-  border-left: 4px solid transparent;
   overflow: hidden;
   transition: all 0.25s ease;
 }
 
 .spotify-inst-line.inst-active {
-  background: linear-gradient(90deg, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
-  border-left: 5px solid var(--color-vad) !important;
-  border-radius: 4px 14px 14px 4px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+  background: radial-gradient(ellipse at center, rgba(168, 85, 247, 0.22) 0%, rgba(168, 85, 247, 0.04) 75%, transparent 100%) !important;
+  border: 1px solid rgba(168, 85, 247, 0.4) !important;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6), 0 0 20px rgba(168, 85, 247, 0.15);
   opacity: 1 !important;
   transform: scale(1.025);
 }
@@ -687,7 +734,9 @@ html, body, #root {
 .inst-body {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
 }
 
 .inst-icon {
@@ -705,8 +754,11 @@ html, body, #root {
   font-family: var(--font-mono);
   font-size: clamp(0.85rem, 1.8vw, 1.1rem);
   font-weight: 800;
-  color: var(--color-chord);
-  margin-left: auto;
+  color: #fde047;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
 .inst-progress-line {
