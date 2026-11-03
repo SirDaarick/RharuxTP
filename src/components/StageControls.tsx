@@ -62,6 +62,8 @@ export const StageControls: React.FC<StageControlsProps> = ({
     else onChangeSpeed(1.0);
   };
 
+  const isVoiceActive = voiceMode !== 'off';
+
   return (
     <div className="spotify-controls-floating-dock">
       {/* Left: Time & Speed */}
@@ -70,13 +72,15 @@ export const StageControls: React.FC<StageControlsProps> = ({
           {formatTime(currentTimeSec)} / {formatTime(totalDurationSec)}
         </span>
 
-        <button
-          className="dock-speed-pill"
-          onClick={handleCycleSpeed}
-          title="Velocidad (0.8x / 1.0x / 1.2x)"
-        >
-          {speedMultiplier}x
-        </button>
+        {!isVoiceActive && (
+          <button
+            className="dock-speed-pill"
+            onClick={handleCycleSpeed}
+            title="Velocidad (0.8x / 1.0x / 1.2x)"
+          >
+            {speedMultiplier}x
+          </button>
+        )}
       </div>
 
       {/* Center: Playback Transport */}
@@ -90,17 +94,28 @@ export const StageControls: React.FC<StageControlsProps> = ({
           <SkipBack size={18} />
         </button>
 
-        <button
-          className="dock-btn-play-main"
-          onClick={onTogglePlay}
-          title={isPlaying ? 'Pausa (Espacio)' : 'Reproducir (Espacio)'}
-        >
-          {isPlaying ? (
-            <Pause size={22} fill="currentColor" />
-          ) : (
-            <Play size={22} fill="currentColor" style={{ marginLeft: 2 }} />
-          )}
-        </button>
+        {/* In Voice Mode: Hide play/pause button completely to avoid confusion */}
+        {!isVoiceActive ? (
+          <button
+            className="dock-btn-play-main"
+            onClick={onTogglePlay}
+            title={isPlaying ? 'Pausa (Espacio)' : 'Reproducir (Espacio)'}
+          >
+            {isPlaying ? (
+              <Pause size={22} fill="currentColor" />
+            ) : (
+              <Play size={22} fill="currentColor" style={{ marginLeft: 2 }} />
+            )}
+          </button>
+        ) : (
+          <div
+            className="dock-voice-active-pill"
+            title="Modo Voz activo: el teleprompter avanza automáticamente al cantar (sin reproducción por tiempo)"
+          >
+            <Mic size={16} className="mic-listening-pulse" />
+            <span className="dock-voice-pill-text">Voz</span>
+          </div>
+        )}
 
         <button
           className="dock-btn-round"
@@ -126,16 +141,16 @@ export const StageControls: React.FC<StageControlsProps> = ({
         {/* Minimalist Voice Toggle */}
         <button
           className={`dock-btn-round dock-btn-subtle ${
-            voiceMode !== 'off' ? 'dock-btn-mic-active' : ''
+            isVoiceActive ? 'dock-btn-mic-active' : ''
           }`}
           onClick={onToggleVoice}
           title={
-            voiceMode === 'words'
+            isVoiceActive
               ? 'Micrófono: Activo (Click para apagar y usar Tiempo)'
               : 'Micrófono: Apagado (Click para activar sincronización por voz)'
           }
         >
-          {voiceMode === 'off' ? (
+          {!isVoiceActive ? (
             <MicOff size={16} />
           ) : (
             <div className="mic-icon-wrapper">

@@ -7,12 +7,14 @@ import gsap from 'gsap';
 
 interface SetlistViewProps {
   currentSongId: string;
+  songs?: Song[];
   onSelectSong: (song: Song) => void;
   onStartShow: () => void;
 }
 
 export const SetlistView: React.FC<SetlistViewProps> = ({
   currentSongId,
+  songs = SETLIST,
   onSelectSong,
   onStartShow,
 }) => {
@@ -59,7 +61,7 @@ export const SetlistView: React.FC<SetlistViewProps> = ({
     return `${mins}:${s.toString().padStart(2, '0')}`;
   };
 
-  const totalDurationSec = SETLIST.reduce(
+  const totalDurationSec = songs.reduce(
     (acc, s) => acc + (s.estimatedDurationSec || 0),
     0
   );
@@ -77,7 +79,7 @@ export const SetlistView: React.FC<SetlistViewProps> = ({
           <h1 className="hero-title">1er. Homenaje a Andy Rharux</h1>
 
           <div className="hero-stats-row">
-            <span>{SETLIST.length} temas</span>
+            <span>{songs.length} temas</span>
             <span className="stat-dot">•</span>
             <span>{Math.round(totalDurationSec / 60)} min</span>
           </div>
@@ -118,7 +120,7 @@ export const SetlistView: React.FC<SetlistViewProps> = ({
         </div>
 
         <div className="tracks-scroll-area">
-          {SETLIST.map((song, index) => {
+          {songs.map((song, index) => {
             const isSelected = song.id === currentSongId;
             const orderNum = index + 1;
 

@@ -1,6 +1,12 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { SETLIST } from './data/songs';
-import type { Song } from './data/songs';
+import type { Song, SongLine } from './data/songs';
+import {
+  getMergedSongs,
+  saveLineOverride,
+  removeLineOverride,
+  hasLineOverride,
+} from './utils/songStorage';
 import { useTimeline } from './hooks/useTimeline';
 import { useVoiceSync } from './hooks/useVoiceSync';
 import { useWakeLock } from './hooks/useWakeLock';
@@ -16,6 +22,7 @@ export type VoiceMode = 'words' | 'off';
 export type ScreenView = 'setlist' | 'prompter';
 
 export function App() {
+  const [songs, setSongs] = useState<Song[]>(() => getMergedSongs(SETLIST));
   const [currentScreen, setCurrentScreen] = useState<ScreenView>('setlist');
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [speedMultiplier, setSpeedMultiplier] = useState(1.0);
@@ -28,19 +35,19 @@ export function App() {
 
   const mainViewRef = useRef<HTMLDivElement>(null);
 
-  const currentSong = SETLIST[currentSongIndex];
+  const currentSong = songs[currentSongIndex] || songs[0];
   const hasPrev = currentSongIndex > 0;
-  const hasNext = currentSongIndex < SETLIST.length - 1;
+  const hasNext = currentSongIndex < songs.length - 1;
 
   // WakeLock: keeps screen awake
   useWakeLock();
 
   // Auto-advance callback
   const handleAutoAdvance = useCallback(() => {
-    if (currentSongIndex < SETLIST.length - 1) {
+    if (currentSongIndex < songs.length - 1) {
       setCurrentSongIndex(prev => prev + 1);
     }
-  }, [currentSongIndex]);
+  }, [currentSongIndex, songs.length]);
 
   // Timeline Engine
   const {
@@ -100,6 +107,9 @@ export function App() {
   }, []);
 
   const handlePlayWithCountdown = useCallback(() => {
+    // In voice mode, playback is controlled by voice, not by time!
+    if (voiceMode !== 'off') return;
+
     if (isPlaying) {
       clearCountdown();
       togglePlay();
@@ -126,7 +136,7 @@ export function App() {
         setCountdown(currentCount);
       }
     }, 1000);
-  }, [isPlaying, countdown, clearCountdown, togglePlay]);
+  }, [isPlaying, countdown, clearCountdown, togglePlay, voiceMode]);
 
   useEffect(() => {
     clearCountdown();
@@ -135,15 +145,30 @@ export function App() {
   const handleToggleVoiceMode = useCallback(() => {
     setVoiceMode(prev => {
       const next: VoiceMode = prev === 'off' ? 'words' : 'off';
+      if (next !== 'off') {
+        clearCountdown();
+        if (isPlaying) {
+          togglePlay();
+        }
+      }
       localStorage.setItem('rharux_voice_mode', next);
       return next;
     });
-  }, []);
+  }, [clearCountdown, isPlaying, togglePlay]);
 
-  const handleSelectVoiceMode = useCallback((mode: VoiceMode) => {
-    setVoiceMode(mode);
-    localStorage.setItem('rharux_voice_mode', mode);
-  }, []);
+  const handleSelectVoiceMode = useCallback(
+    (mode: VoiceMode) => {
+      if (mode !== 'off') {
+        clearCountdown();
+        if (isPlaying) {
+          togglePlay();
+        }
+      }
+      setVoiceMode(mode);
+      localStorage.setItem('rharux_voice_mode', mode);
+    },
+    [clearCountdown, isPlaying, togglePlay]
+  );
 
   const handlePrevSong = useCallback(() => {
     if (currentSongIndex > 0) {
@@ -152,27 +177,29 @@ export function App() {
   }, [currentSongIndex]);
 
   const handleNextSong = useCallback(() => {
-    if (currentSongIndex < SETLIST.length - 1) {
+    if (currentSongIndex < songs.length - 1) {
       setCurrentSongIndex(prev => prev + 1);
     }
-  }, [currentSongIndex]);
+  }, [currentSongIndex, songs.length]);
 
   const handleSelectSong = useCallback(
     (song: Song) => {
-      const idx = SETLIST.findIndex(s => s.id === song.id);
+      const idx = songs.findIndex(s => s.id === song.id);
       if (idx !== -1) {
         setCurrentSongIndex(idx);
       }
       setCurrentScreen('prompter');
     },
-    []
+    [songs]
   );
 
   const handleStartShow = useCallback(() => {
     setCurrentSongIndex(0);
     setCurrentScreen('prompter');
-    handlePlayWithCountdown();
-  }, [handlePlayWithCountdown]);
+    if (voiceMode === 'off') {
+      handlePlayWithCountdown();
+    }
+  }, [handlePlayWithCountdown, voiceMode]);
 
   const handleToggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement) {
@@ -236,11 +263,36 @@ export function App() {
     onToggleFullscreen: handleToggleFullscreen,
   });
 
+  // Song Line Editing Handlers
+  const handleSaveLine = useCallback(
+    (sectionIndex: number, lineIndexInSection: number, updatedLine: SongLine) => {
+      saveLineOverride(currentSong.id, sectionIndex, lineIndexInSection, updatedLine);
+      setSongs(getMergedSongs(SETLIST));
+    },
+    [currentSong.id]
+  );
+
+  const handleResetLine = useCallback(
+    (sectionIndex: number, lineIndexInSection: number) => {
+      removeLineOverride(currentSong.id, sectionIndex, lineIndexInSection);
+      setSongs(getMergedSongs(SETLIST));
+    },
+    [currentSong.id]
+  );
+
+  const checkIsLineCustomized = useCallback(
+    (sectionIndex: number, lineIndexInSection: number) => {
+      return hasLineOverride(currentSong.id, sectionIndex, lineIndexInSection);
+    },
+    [currentSong.id]
+  );
+
   return (
     <div className="teleprompter-app-root">
       <div className="view-animation-wrapper" ref={mainViewRef}>
         {currentScreen === 'setlist' ? (
           <SetlistView
+            songs={songs}
             currentSongId={currentSong.id}
             onSelectSong={handleSelectSong}
             onStartShow={handleStartShow}
@@ -286,8 +338,13 @@ export function App() {
                 activeLineIndex={activeLineIndex}
                 currentTimeSec={currentTimeSec}
                 isPlaying={isPlaying}
+                voiceMode={voiceMode}
+                songTitle={currentSong.title}
                 onJumpToLine={jumpToLine}
                 onTogglePlay={handlePlayWithCountdown}
+                onSaveLine={handleSaveLine}
+                onResetLine={handleResetLine}
+                isLineCustomized={checkIsLineCustomized}
               />
             </main>
 
